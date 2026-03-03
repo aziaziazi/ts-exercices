@@ -1,4 +1,4 @@
-# Exercices around Array and Object in TS
+# Exercices about Array and Object in TS
 
 ## Install
 
