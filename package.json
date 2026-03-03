@@ -1,0 +1,21 @@
+{
+  "name": "ts-exercices",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "test": "vitest",
+    "lint": "eslint --concurrency auto && prettier --write ."
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.39.2",
+    "eslint": "^9.39.2",
+    "globals": "^17.2.0",
+    "jiti": "^2.6.1",
+    "prettier": "^3.3.1",
+    "typescript": "^5.2.2",
+    "typescript-eslint": "^8.54.0",
+    "vite": "^5.2.0",
+    "vitest": "^4.0.18"
+  }
+}
