@@ -181,7 +181,7 @@ export const groupByVowelCount = (
  *
  *
  * Use : [...Array()), Array.keys(), map, Math.floor(), Math.sign
- * Or while() and none of the above
+ * Or use while() and none of the above methods
  */
 export const range = (_start: number, _end: number, _step = 1): number[] => {
   return []
