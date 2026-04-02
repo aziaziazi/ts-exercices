@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-vars*/
+ 
 /**
  * Implements the functions.
  * Only replace the `// return *`
@@ -12,7 +12,7 @@
  * Use: ...
  */
 export const getArrayFromString = (_s: string) => {
-  return ''
+  return Array.from(_s)
 }
 
 /**
@@ -22,7 +22,7 @@ export const getArrayFromString = (_s: string) => {
  * Use: at()
  */
 export const getSecondItem = <T>(_arr: T[]): T | undefined => {
-  return undefined
+  return _arr[1]
 }
 
 /**
@@ -32,7 +32,7 @@ export const getSecondItem = <T>(_arr: T[]): T | undefined => {
  * Use: at()
  */
 export const getSecondToLastItem = <T>(_arr: T[]): T | undefined => {
-  return undefined
+  return _arr[_arr.length - 2]
 }
 
 /**
@@ -42,7 +42,7 @@ export const getSecondToLastItem = <T>(_arr: T[]): T | undefined => {
  * Use: filter()
  */
 export const getStringItems = (_arr: Array<string | unknown>): string[] => {
-  return []
+  return _arr.filter(item => typeof item === "string")
 }
 
 /**
@@ -52,7 +52,7 @@ export const getStringItems = (_arr: Array<string | unknown>): string[] => {
  * Use: filter()
  */
 export const getItemAtEvenIndices = <T>(_arr: T[]): T[] => {
-  return []
+  return _arr.filter((_, index) => index % 2 === 0)
 }
 
 /**
@@ -62,7 +62,7 @@ export const getItemAtEvenIndices = <T>(_arr: T[]): T[] => {
  * Use: reverse() or toReversed()
  */
 export const reverseOrder = <T>(_arr: T[]): T[] => {
-  return []
+  return _arr.toReversed()
 }
 
 /**
@@ -72,7 +72,7 @@ export const reverseOrder = <T>(_arr: T[]): T[] => {
  * Use: sort() or toSorted()
  */
 export const sortByOrder = (_arr: TypeEx4[]): TypeEx4[] => {
-  return []
+  return [..._arr].sort((a, b) => a.order - b.order)
 }
 interface TypeEx4 {
   name: string
@@ -86,7 +86,8 @@ interface TypeEx4 {
  * Use: flatMap() or flat()
  */
 export const flatArray = (_arr: unknown[]): unknown[] => {
-  return []
+  return _arr.flat(Infinity)
+  // return _arr.flatMap(item => Array.isArray(item) ? flatArray(item) : item)
 }
 
 /**
@@ -99,7 +100,7 @@ export const hasItemAboveThreshold = (
   _arr: number[],
   _threshold: number,
 ): boolean => {
-  return false
+  return _arr.some(item => item > _threshold)
 }
 
 /**
@@ -112,7 +113,7 @@ export const hasAllItemAboveThreshold = (
   _arr: number[],
   _threshold: number,
 ): boolean => {
-  return false
+  return _arr.every(item => item > _threshold)
 }
 
 const hasLowerCase = (s: string): boolean => /[a-z]/.test(s)
@@ -133,7 +134,13 @@ const isLong = (s: string): boolean => s.length >= 8
  * Use only : 1 every()
  */
 export const isStrongPassword = (password: string): boolean => {
-  return false
+  return [
+    hasLowerCase,
+    hasUpperCase,
+    hasNumber,
+    hasSpecialChar,
+    isLong,
+  ].every(p => p(password))
 }
 
 /**
@@ -145,11 +152,17 @@ export const isStrongPassword = (password: string): boolean => {
 export const sortArtists = (
   _data: Record<number, Array<{ artist: string; title: string }>>,
 ): string[] => {
-  return []
+  const toto =  Object.values(_data).flat().flatMap(item => item.artist).toSorted((a, b) => a.localeCompare(b))
+  return toto
+  
 }
 
-const removeDiacritics = (s: string): string =>
-  s.normalize('NFD').replace(/\p{Diacritic}/gu, '')
+
+const removeDiacritics = (str: string) =>
+  str.normalize('NFKD').replace(/\p{Diacritic}/gu, '')
+
+const VOWELS = 'aeiouy'
+
 /**
  * Exercice 13:
  * Group all artists from Exercice 12 by count of vowels (aeiouy) in their name.
@@ -167,7 +180,14 @@ const removeDiacritics = (s: string): string =>
 export const groupByVowelCount = (
   _data: Record<number, Array<{ artist: string; title: string }>>,
 ): Record<number, string[]> => {
-  return {}
+  return sortArtists(_data).reduce<Record<number, string[]>>((prev, curr) => {
+    const vowelsCount = Array.from(removeDiacritics(curr).toLocaleLowerCase())
+      .filter(letter => VOWELS.includes(letter))
+      .length
+    const preVowelsCountGroup = (prev[vowelsCount] || [])
+
+    return {...prev, [Number(vowelsCount)]: [...preVowelsCountGroup, curr]}
+  }, {})
 }
 
 /**
@@ -183,5 +203,25 @@ export const groupByVowelCount = (
  * Use : [...Array()), Array.keys(), map, Math.floor(), Math.sign
  */
 export const range = (_start: number, _end: number, _step = 1): number[] => {
-  return []
+  const result: number[] = [_start]
+  const isReverse = (_start - _end) > 0
+  const getNext = () => result[result.length-1] + (isReverse ? -_step : _step)
+  let next = getNext();
+
+  while (isReverse ? next >= _end : next <= _end ) {
+    result.push(next)    
+    next = getNext()
+  } 
+  return result
+}
+
+
+export const range2 = (_start: number, _end: number, _step = 1): number[] => {
+  const diff = (_end - _start) / _step
+  const direction = Math.sign(diff)
+  const numberOfElements = Math.floor(diff + 1) * direction
+  
+  return [...Array(numberOfElements)].map((_, index) => {
+    return  _start + (index * _step * direction)
+  }) 
 }
