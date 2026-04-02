@@ -180,7 +180,7 @@ export const groupByVowelCount = (
  * d) Generate all integers from start to end with step (can be decreasing)
  *
  *
- * Use : [...Array()), Array.keys(), map, Math.floor(), Math.sign
+ * Use : [...Array()], Array.keys(), map, Math.floor(), Math.sign, Math.abs
  */
 export const range = (_start: number, _end: number, _step = 1): number[] => {
   return []
